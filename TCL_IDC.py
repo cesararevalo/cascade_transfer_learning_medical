@@ -13,6 +13,7 @@ import torch.nn as nn
 from data_manager.IDC import get_dataloader
 from model.CascadeNet import load_conv
 from train import train
+import ray # CA
 from ray import tune
 from ray.tune.trial import ExportFormat
 
@@ -207,9 +208,10 @@ if __name__ == '__main__':
         "--smoke-test", action="store_true", help="Finish quickly for testing")
 
     # folder
-    parser.add_argument('--root_dir', type=str, default='/Users/cesar/Documents/university/illinois/cs-598-deep_learning_for_healthcare/project/code/cascade_transfer_learning_medical/Breast Histopathology Images')
+    parser.add_argument('--root_dir', type=str,
+                        default='/cascade_transfer_learning_medical/Breast_Histopathology_Images')
     parser.add_argument('--network_address', type=str,
-                        default='/Users/cesar/Documents/university/illinois/cs-598-deep_learning_for_healthcare/project/code/cascade_transfer_learning_medical/model/sourcemodel/SourceNetwork')
+                        default='/cascade_transfer_learning_medical/model/sourcemodel/SourceNetwork')
     parser.add_argument('--save_folder', type=str, help='folder for saving checkpoints')
     parser.add_argument('--name', type=str, default='test_result', help='ray result folder name')
 
@@ -218,17 +220,19 @@ if __name__ == '__main__':
     parser.add_argument('--n_class', type=int, default=2)
     parser.add_argument('--n_split', type=int, default=5)
 
-    #parser.add_argument('--max_iter', type=int, default=200, help='max number of epoch')
-    parser.add_argument('--max_iter', type=int, default=10, help='max number of epoch')
+    parser.add_argument('--max_iter', type=int, default=200, help='max number of epoch')
 
     # others
-    #parser.add_argument('--print_freq', type=int, default=200, help='iterations')
-    parser.add_argument('--print_freq', type=int, default=10, help='iterations')
+    parser.add_argument('--print_freq', type=int, default=200, help='iterations')
     parser.add_argument('--n_gpu', default=1.0, type=float)
     parser.add_argument('--num_worker', type=int, default=8)
 
     args = parser.parse_args()
 
+    # CA
+    parser.add_argument("--ray_address")
+    args = parser.parse_args()
+    ray.init(address=args.address, num_cpus=4, num_gpus=1)
 
     def model_layer_iter():
         for model in ['TCL']:
@@ -239,9 +243,8 @@ if __name__ == '__main__':
 
     analysis = tune.run(
         training,
-        #num_samples=50,
-        num_samples=5,
-        resources_per_trial={"cpu": 4, "gpu": args.n_gpu},
+        num_samples=50,
+        resources_per_trial={"cpu": 2, "gpu": args.n_gpu},
         mode="max",
         export_formats=[ExportFormat.MODEL],
         checkpoint_score_attr="ACC",
@@ -249,12 +252,10 @@ if __name__ == '__main__':
         config={
             "args": args,
             "lr": tune.loguniform(1e-5, 1e-1),
-            #"batch_size": tune.choice([8, 16, 32, 64]),
-            "batch_size": tune.choice([1, 2, 4, 8]),
+            "batch_size": tune.choice([8, 16, 32, 64]),
             "currerent_fold": tune.choice([0, 1, 2, 3, 4]),
             "data_percentage": tune.sample_from(lambda spec: spec.config.training_size/219388),
-            #"training_size": tune.grid_search([400, 600, 800]),
-            "training_size": tune.grid_search([2, 4, 8]),
+            "training_size": tune.grid_search([400, 600, 800]),
             "partition_random_state": tune.choice([0, 1, 2]),  # partitioning dataset
             "layer_model": tune.grid_search(list(model_layer_iter()))
         },

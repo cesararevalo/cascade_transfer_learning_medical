@@ -1,0 +1,112 @@
+# An unique identifier for the head node and workers of this cluster.
+cluster_name: mcs_598_dlh
+
+# The maximum number of workers nodes to launch in addition to the head node.
+max_workers: 1
+
+# This executes all commands on all nodes in the docker container,
+# and opens all the necessary ports to support the Ray cluster.
+# Empty string means disabled.
+docker:
+  # image: "rayproject/ray-ml:latest-gpu" # You can change this to latest-cpu if you don't need GPU support and want a faster startup
+  # image: rayproject/ray:latest-cpu   # use this one if you don't need ML dependencies, it's faster to pull
+  container_name: "ray_container"
+  # If true, pulls latest version of image. Otherwise, `docker run` will only pull the image
+  # if no cached version is present.
+  pull_before_run: True
+  run_options:   # Extra options to pass into "docker run"
+    - --ulimit nofile=65536:65536
+
+  # Example of running a GPU head with CPU workers
+  head_image: "cesararevalo/mcs:ray_cpu"
+  # Allow Ray to automatically detect GPUs
+
+  worker_image: "cesararevalo/mcs:ray_gpu"
+  # worker_run_options: []
+
+# If a node is idle for this many minutes, it will be removed.
+idle_timeout_minutes: 1
+
+# AWS specific configuration.
+provider:
+  type: aws
+  region: us-west-1
+  cache_stopped_nodes: False
+#  security_group:
+#    GroupName: <string>
+
+available_node_types:
+  ray.head.default:
+    node_config:
+      #InstanceType: t3.small
+      #InstanceType: t3.micro
+      InstanceType: g2.2xlarge
+      InstanceMarketOptions:
+        MarketType: spot
+        SpotOptions:
+          # setting this too low can make the cluster wait for scaling a lot
+          #MaxPrice: "0.009" # t3.small
+          MaxPrice: "0.2695" # g2.2xlarge
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 140
+    #resources: { "CPU": 0 }
+    resources: { "CPU": 4, "GPU": 1 } # g2.2xlarge
+  ray.worker.default:
+    # The minimum number of worker nodes of this type to launch.
+    # This number should be >= 0.
+    min_workers: 0
+    # The maximum number of worker nodes of this type to launch.
+    # This takes precedence over min_workers.
+    max_workers: 1
+    # The node type's CPU and GPU resources are auto-detected based on AWS instance type.
+    # If desired, you can override the autodetected CPU and GPU resources advertised to the autoscaler.
+    # You can also set custom resources.
+    # For example, to mark a node type as having 1 CPU, 1 GPU, and 5 units of a resource called "custom", set
+    # resources: {"CPU": 1, "GPU": 1, "custom": 5}
+    #resources: { "CPU": 4, "GPU": 1 } # g2.2xlarge
+    resources: { "CPU": 2 }
+    node_config:
+      InstanceType: t3.small
+      #InstanceType: g2.2xlarge
+      InstanceMarketOptions:
+        MarketType: spot
+        SpotOptions:
+          # setting this too low can make the cluster wait for scaling a lot
+          #MaxPrice: "0.2695" # g2.2xlarge
+          MaxPrice: "0.009" # t3.small
+
+# Specify the node type of the head node (as configured above).
+head_node_type: ray.head.default
+
+# Files or directories to copy to the head and worker nodes. The format is a
+# dictionary from REMOTE_PATH: LOCAL_PATH, e.g.
+file_mounts: {
+  # file mounts take ~15mins
+  "/cascade_transfer_learning_medical": "/Users/cesar/Documents/university/illinois/cs-598-deep_learning_for_healthcare/project/cascade_transfer_learning_medical",
+}
+
+# Patterns for files to exclude when running rsync up or rsync down
+rsync_exclude:
+  - "**/.git"
+  - "**/.git/**"
+
+# Pattern files to use for filtering out files when running rsync up or rsync down. The file is searched for
+# in the source directory and recursively through all subdirectories. For example, if .gitignore is provided
+# as a value, the behavior will match git's behavior for finding and using .gitignore files.
+rsync_filter:
+  - ".gitignore"
+
+# List of shell commands to run to set up nodes.
+setup_commands:
+  # Note: if you're developing Ray, you probably want to create a Docker image that
+  # has your Ray repo pre-cloned. Then, you can replace the pip installs
+  # below with a git checkout <your_sha> (and possibly a recompile).
+  # To run the nightly version of ray (as opposed to the latest), either use a rayproject docker image
+  # that has the "nightly" (e.g. "rayproject/ray-ml:nightly-gpu") or uncomment the following line:
+#  - pip install -U "ray[default] @ https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-3.0.0.dev0-cp37-cp37m-manylinux2014_x86_64.whl"
+  - ln -fsn /IDC_regular_ps50_idx5 /cascade_transfer_learning_medical/Breast_Histopathology_Images/IDC_regular_ps50_idx5
+  - sudo apt install nano
+  - pip install scikit-learn opencv-python
+  - echo 'export PYTHONPATH="/cascade_transfer_learning_medical"' >> ~/.bashrc

@@ -1,0 +1,5 @@
+FROM rayproject/ray-ml:latest-gpu
+
+COPY /IDC_regular_ps50_idx5/ /IDC_regular_ps50_idx5/
+
+RUN pip install torch torchvision

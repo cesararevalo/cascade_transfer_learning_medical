@@ -1,2 +1,11 @@
 /.ipynb_checkpoints/
 .idea
+/Breast_Histopathology_Images/IDC_regular_ps50_idx5/
+train.cpython-310.pyc
+util.cpython-310.pyc
+__init__.cpython-310.pyc
+IDC.cpython-310.pyc
+transform_config.cpython-310.pyc
+cascade_transfer_learning_medical.iml
+CascadeNet.cpython-310.pyc
+Build_Network.cpython-310.pyc
