@@ -1,0 +1,86 @@
+== Status ==
+Current time: 2023-04-13 12:36:12 (running for 02:34:17.17)
+Memory usage on this node: 5.1/15.3 GiB
+Using FIFO scheduling algorithm.
+Resources requested: 8.0/8 CPUs, 2.0/2 GPUs, 0.0/20.21 GiB heap, 0.0/9.07 GiB objects (0.0/2.0 accelerator_type:T4)
+Result logdir: /cascade_transfer_learning_medical/test_result
+Number of trials: 18/600 (16 PENDING, 2 RUNNING)
++----------------------+----------+--------------------+--------------+------------------+-------------------+---------------+-------------+------------------------+-----------------+--------+------------------+---------+-------------+------------+
+| Trial name           | status   | loc                |   batch_size |   currerent_fold |   data_percentage | layer_model   |          lr |   partition_random_sta |   training_size |   iter |   total time (s) |     ACC |          lr |   val_loss |
+|                      |          |                    |              |                  |                   |               |             |                     te |                 |        |                  |         |             |            |
+|----------------------+----------+--------------------+--------------+------------------+-------------------+---------------+-------------+------------------------+-----------------+--------+------------------+---------+-------------+------------|
+| training_e4905_00000 | RUNNING  | 172.31.25.221:7611 |           16 |                1 |        0.00182325 | (3, 'TCL')    | 1.04644e-05 |                      0 |             400 |     16 |          8949.39 | 84.9172 | 1.04644e-05 |   0.372229 |
+| training_e4905_00001 | RUNNING  | 172.31.20.188:456  |           16 |                3 |        0.00182325 | (4, 'TCL')    | 0.0820948   |                      0 |             400 |     20 |          8380.47 | 75.8265 | 0.0820948   |   0.655599 |
+| training_e4905_00002 | PENDING  |                    |           64 |                1 |        0.00182325 | (5, 'TCL')    | 0.0019063   |                      2 |             400 |        |                  |         |             |            |
+| training_e4905_00003 | PENDING  |                    |           16 |                2 |        0.00182325 | (6, 'TCL')    | 0.00617701  |                      0 |             400 |        |                  |         |             |            |
+| training_e4905_00004 | PENDING  |                    |           16 |                4 |        0.00273488 | (3, 'TCL')    | 0.00535054  |                      0 |             600 |        |                  |         |             |            |
+| training_e4905_00005 | PENDING  |                    |            8 |                3 |        0.00273488 | (4, 'TCL')    | 0.000141025 |                      2 |             600 |        |                  |         |             |            |
+| training_e4905_00006 | PENDING  |                    |           32 |                4 |        0.00273488 | (5, 'TCL')    | 0.00703312  |                      1 |             600 |        |                  |         |             |            |
+| training_e4905_00007 | PENDING  |                    |           16 |                2 |        0.00273488 | (6, 'TCL')    | 0.0422954   |                      1 |             600 |        |                  |         |             |            |
+| training_e4905_00008 | PENDING  |                    |           16 |                4 |        0.00364651 | (3, 'TCL')    | 0.00155274  |                      2 |             800 |        |                  |         |             |            |
+| training_e4905_00009 | PENDING  |                    |           16 |                0 |        0.00364651 | (4, 'TCL')    | 3.18961e-05 |                      1 |             800 |        |                  |         |             |            |
+| training_e4905_00010 | PENDING  |                    |           32 |                2 |        0.00364651 | (5, 'TCL')    | 2.94397e-05 |                      0 |             800 |        |                  |         |             |            |
+| training_e4905_00011 | PENDING  |                    |           16 |                0 |        0.00364651 | (6, 'TCL')    | 0.00831002  |                      2 |             800 |        |                  |         |             |            |
+| training_e4905_00012 | PENDING  |                    |           16 |                0 |        0.00182325 | (3, 'TCL')    | 0.00474767  |                      1 |             400 |        |                  |         |             |            |
+| training_e4905_00013 | PENDING  |                    |           64 |                3 |        0.00182325 | (4, 'TCL')    | 0.01711     |                      2 |             400 |        |                  |         |             |            |
+| training_e4905_00014 | PENDING  |                    |            8 |                2 |        0.00182325 | (5, 'TCL')    | 0.0197359   |                      1 |             400 |        |                  |         |             |            |
+| training_e4905_00015 | PENDING  |                    |            8 |                0 |        0.00182325 | (6, 'TCL')    | 0.00027177  |                      1 |             400 |        |                  |         |             |            |
+| training_e4905_00016 | PENDING  |                    |           16 |                4 |        0.00273488 | (3, 'TCL')    | 0.00646045  |                      2 |             600 |        |                  |         |             |            |
+| training_e4905_00017 | PENDING  |                    |           32 |                0 |        0.00273488 | (4, 'TCL')    | 0.000396101 |                      0 |             600 |        |                  |         |             |            |
++----------------------+----------+--------------------+--------------+------------------+-------------------+---------------+-------------+------------------------+-----------------+--------+------------------+---------+-------------+------------+
+
+
+2023-04-13 12:36:12,043 ERROR tune.py:794 -- Trials did not complete: [training_e4905_00000, training_e4905_00001, training_e4905_00002, training_e4905_00003, training_e4905_00004, training_e4905_00005, training_e4905_00006, training_e4905_00007, training_e4905_00008, training_e4905_00009, training_e4905_00010, training_e4905_00011, training_e4905_00012, training_e4905_00013, training_e4905_00014, training_e4905_00015, training_e4905_00016, training_e4905_00017]
+2023-04-13 12:36:12,043 INFO tune.py:799 -- Total run time: 9257.37 seconds (9257.17 seconds for the tuning loop).
+2023-04-13 12:36:12,043 WARNING tune.py:805 -- Experiment has been interrupted, but the most recent state was saved. You can continue running this experiment by passing `resume=True` to `tune.run()`
+Shared connection to 54.151.36.10 closed.
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical %
+(venv) cesar@Cesars-MacBook-Pro-4 cascade_transfer_learning_medical % ray up -y ray/config.yaml
+Cluster: mcs_598_dlh
+
+2023-04-13 12:46:05,716 INFO util.py:372 -- setting max workers for head node type to 0
+Checking AWS environment settings
+AWS config
+  IAM Profile: ray-autoscaler-v1 [default]
+  EC2 Key pair (all available node types): ray-autoscaler_us-west-1 [default]
+  VPC Subnets (all available node types): subnet-0e05c8f5d5c14dab7, subnet-0c3430a0e81ead138 [default]
+  EC2 Security groups (all available node types): sg-032c05466766ce55b [default]
+  EC2 AMI (all available node types): ami-020ab1b368a5ed1db [dlami]
+
+Updating cluster configuration and running full setup.
+Cluster Ray runtime will be restarted. Confirm [y/N]: y [automatic, due to --yes]
+
+Usage stats collection is enabled. To disable this, add `--disable-usage-stats` to the command that starts the cluster, or run the following command: `ray disable-usage-stats` before starting the cluster. See https://docs.ray.io/en/master/cluster/usage-stats.html for more details.
+
+<1/1> Setting up head node
+  Prepared bootstrap config
+  New status: waiting-for-ssh
+  [1/7] Waiting for SSH to become available
+    Running `uptime` as a test.
+    Fetched IP: 54.151.36.10
+Warning: Permanently added '54.151.36.10' (ECDSA) to the list of known hosts.
+ 19:46:11 up  3:34,  1 user,  load average: 0.00, 0.21, 0.84
+Shared connection to 54.151.36.10 closed.
+    Success.
+  Updating cluster configuration. [hash=fe6a885e2cecefa48c53127a01d9e1df3cb23714]
+  New status: syncing-files
+  [2/7] Processing file mounts
+Shared connection to 54.151.36.10 closed.
+    /cascade_transfer_learning_medical/ from /Users/cesar/Documents/university/illinois/cs-598-deep_learning_for_healthcare/project/cascade_transfer_learning_medical/
+Shared connection to 54.151.36.10 closed.
+Shared connection to 54.151.36.10 closed.
+  [3/7] No worker file mounts to sync
+  New status: setting-up
+  [4/7] No initialization commands to run.
+  [5/7] Initializing command runner
+Shared connection to 54.151.36.10 closed.
+ray_gpu: Pulling from cesararevalo/mcs
+Digest: sha256:6bb60e4de032a117832f0a561882e481169c532177845d85d9ee88a0a40933b0
+Status: Image is up to date for cesararevalo/mcs:ray_gpu
+d

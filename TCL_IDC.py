@@ -220,19 +220,22 @@ if __name__ == '__main__':
     parser.add_argument('--n_class', type=int, default=2)
     parser.add_argument('--n_split', type=int, default=5)
 
-    parser.add_argument('--max_iter', type=int, default=200, help='max number of epoch')
+    #parser.add_argument('--max_iter', type=int, default=200, help='max number of epoch')
+    parser.add_argument('--max_iter', type=int, default=2, help='max number of epoch') # CA
 
     # others
-    parser.add_argument('--print_freq', type=int, default=200, help='iterations')
+    #parser.add_argument('--print_freq', type=int, default=200, help='iterations')
+    parser.add_argument('--print_freq', type=int, default=1000, help='iterations')
     parser.add_argument('--n_gpu', default=1.0, type=float)
     parser.add_argument('--num_worker', type=int, default=8)
+
+    # CA
+    parser.add_argument("--ray_address")
 
     args = parser.parse_args()
 
     # CA
-    parser.add_argument("--ray_address")
-    args = parser.parse_args()
-    ray.init(address=args.address, num_cpus=4, num_gpus=1)
+    ray.init(address=args.ray_address)
 
     def model_layer_iter():
         for model in ['TCL']:
@@ -243,8 +246,9 @@ if __name__ == '__main__':
 
     analysis = tune.run(
         training,
-        num_samples=50,
-        resources_per_trial={"cpu": 2, "gpu": args.n_gpu},
+        #num_samples=50,
+        num_samples=5, # CA
+        resources_per_trial={"cpu": 4, "gpu": args.n_gpu}, # CA
         mode="max",
         export_formats=[ExportFormat.MODEL],
         checkpoint_score_attr="ACC",
@@ -252,14 +256,18 @@ if __name__ == '__main__':
         config={
             "args": args,
             "lr": tune.loguniform(1e-5, 1e-1),
-            "batch_size": tune.choice([8, 16, 32, 64]),
+            #"batch_size": tune.choice([8, 16, 32, 64]),
+            "batch_size": tune.choice([2, 4, 8, 16]), # CA
             "currerent_fold": tune.choice([0, 1, 2, 3, 4]),
             "data_percentage": tune.sample_from(lambda spec: spec.config.training_size/219388),
-            "training_size": tune.grid_search([400, 600, 800]),
+            #"training_size": tune.grid_search([400, 600, 800]),
+            "training_size": tune.grid_search([4, 6, 8]), # CA
             "partition_random_state": tune.choice([0, 1, 2]),  # partitioning dataset
             "layer_model": tune.grid_search(list(model_layer_iter()))
         },
         name=args.name,
         resume=False,
-        local_dir='./'
+        #resume="AUTO", # CA
+        local_dir='/cascade_transfer_learning_medical/', # CA
+        sync_config = tune.SyncConfig(sync_period=60), # CA
     )

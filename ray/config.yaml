@@ -2,7 +2,7 @@
 cluster_name: mcs_598_dlh
 
 # The maximum number of workers nodes to launch in addition to the head node.
-max_workers: 1
+max_workers: 2
 
 # This executes all commands on all nodes in the docker container,
 # and opens all the necessary ports to support the Ray cluster.
@@ -18,7 +18,8 @@ docker:
     - --ulimit nofile=65536:65536
 
   # Example of running a GPU head with CPU workers
-  head_image: "cesararevalo/mcs:ray_cpu"
+  #head_image: "cesararevalo/mcs:ray_cpu"
+  head_image: "cesararevalo/mcs:ray_gpu"
   # Allow Ray to automatically detect GPUs
 
   worker_image: "cesararevalo/mcs:ray_gpu"
@@ -31,6 +32,7 @@ idle_timeout_minutes: 1
 provider:
   type: aws
   region: us-west-1
+  #availability_zone: us-west-1c
   cache_stopped_nodes: False
 #  security_group:
 #    GroupName: <string>
@@ -38,44 +40,56 @@ provider:
 available_node_types:
   ray.head.default:
     node_config:
+      #InstanceType: t3.micro # FREE
       #InstanceType: t3.small
-      #InstanceType: t3.micro
-      InstanceType: g2.2xlarge
+      #InstanceType: g2.2xlarge
+      #InstanceType: g3.4xlarge
+      InstanceType: g4dn.xlarge
       InstanceMarketOptions:
         MarketType: spot
         SpotOptions:
           # setting this too low can make the cluster wait for scaling a lot
           #MaxPrice: "0.009" # t3.small
-          MaxPrice: "0.2695" # g2.2xlarge
+          #MaxPrice: "0.291" # g2.2xlarge
+          #MaxPrice: "0.4602" # g3.4xlarge
+          MaxPrice: "0.1893" # g4dn.xlarge
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
             VolumeSize: 140
     #resources: { "CPU": 0 }
-    resources: { "CPU": 4, "GPU": 1 } # g2.2xlarge
+    #resources: { "CPU": 4, "GPU": 1 } # g2.2xlarge
+    #resources: { "CPU": 8, "GPU": 1 } # g3.4xlarge
+    resources: { "CPU": 4, "GPU": 1 } # g3.4xlarge
   ray.worker.default:
     # The minimum number of worker nodes of this type to launch.
     # This number should be >= 0.
     min_workers: 0
     # The maximum number of worker nodes of this type to launch.
     # This takes precedence over min_workers.
-    max_workers: 1
+    max_workers: 2
     # The node type's CPU and GPU resources are auto-detected based on AWS instance type.
     # If desired, you can override the autodetected CPU and GPU resources advertised to the autoscaler.
     # You can also set custom resources.
     # For example, to mark a node type as having 1 CPU, 1 GPU, and 5 units of a resource called "custom", set
     # resources: {"CPU": 1, "GPU": 1, "custom": 5}
+    #resources: { "CPU": 2 } # t3.small
     #resources: { "CPU": 4, "GPU": 1 } # g2.2xlarge
-    resources: { "CPU": 2 }
+    #resources: { "CPU": 8, "GPU": 1 } # g3.4xlarge
+    resources: { "CPU": 4, "GPU": 1 } # g4dn.xlarge
     node_config:
-      InstanceType: t3.small
+      #InstanceType: t3.small
       #InstanceType: g2.2xlarge
+      #InstanceType: g3.4xlarge
+      InstanceType: g4dn.xlarge
       InstanceMarketOptions:
         MarketType: spot
         SpotOptions:
           # setting this too low can make the cluster wait for scaling a lot
-          #MaxPrice: "0.2695" # g2.2xlarge
-          MaxPrice: "0.009" # t3.small
+          #MaxPrice: "0.009" # t3.small
+          #MaxPrice: "0.291" # g2.2xlarge
+          #MaxPrice: "0.4602" # g3.4xlarge
+          MaxPrice: "0.1893" # g4dn.xlarge
 
 # Specify the node type of the head node (as configured above).
 head_node_type: ray.head.default
@@ -109,4 +123,4 @@ setup_commands:
   - ln -fsn /IDC_regular_ps50_idx5 /cascade_transfer_learning_medical/Breast_Histopathology_Images/IDC_regular_ps50_idx5
   - sudo apt install nano
   - pip install scikit-learn opencv-python
-  - echo 'export PYTHONPATH="/cascade_transfer_learning_medical"' >> ~/.bashrc
+  - echo 'export PYTHONPATH="/cascade_transfer_learning_medical":"/cascade_transfer_learning_medical/model/sourcemodel"' >> ~/.bashrc

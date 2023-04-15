@@ -1,10 +1,9 @@
 import sys
-sys.path.append('./model/sourcemodel')
-sys.path.append('../Cascade_Transfer_Learning/model/sourcemodel')
+#sys.path.append('./sourcemodel')
+sys.path.append('/cascade_transfer_learning_medical/model/sourcemodel')
 import torch
 import torch.nn as nn
 import os
-import Build_Network
 
 
 def freeze(m):

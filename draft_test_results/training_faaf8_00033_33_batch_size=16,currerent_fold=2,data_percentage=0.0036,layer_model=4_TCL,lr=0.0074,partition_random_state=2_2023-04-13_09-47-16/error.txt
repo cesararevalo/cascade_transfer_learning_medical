@@ -1,0 +1,18 @@
+Failure # 1 (occurred at 2023-04-13_09-47-20)
+[36mray::ImplicitFunc.train()[39m (pid=1736, ip=172.31.24.208, repr=training)
+  File "/home/ray/anaconda3/lib/python3.7/site-packages/ray/tune/trainable/trainable.py", line 368, in train
+    raise skipped from exception_cause(skipped)
+  File "/home/ray/anaconda3/lib/python3.7/site-packages/ray/tune/trainable/function_trainable.py", line 340, in entrypoint
+    self._status_reporter.get_checkpoint(),
+  File "/home/ray/anaconda3/lib/python3.7/site-packages/ray/tune/trainable/function_trainable.py", line 654, in _trainable_func
+    output = fn()
+  File "/home/ray/TCL_IDC.py", line 195, in training
+  File "/cascade_transfer_learning_medical/model/CascadeNet.py", line 23, in load_conv
+    map_location='cpu').module
+  File "/home/ray/anaconda3/lib/python3.7/site-packages/torch/serialization.py", line 795, in load
+    return _legacy_load(opened_file, map_location, pickle_module, **pickle_load_args)
+  File "/home/ray/anaconda3/lib/python3.7/site-packages/torch/serialization.py", line 1012, in _legacy_load
+    result = unpickler.load()
+  File "/home/ray/anaconda3/lib/python3.7/site-packages/torch/serialization.py", line 828, in find_class
+    return super().find_class(mod_name, name)
+ModuleNotFoundError: No module named 'Build_Network'

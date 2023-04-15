@@ -39,6 +39,19 @@
 % docker push cesararevalo/mcs:ray_gpu
 ```
 
+
+```
+% ray attach ray/config.yaml
+
+% ray submit ray/config.yaml TCL_IDC.py --root_dir=/cascade_transfer_learning_medical/Breast_Histopathology_Images --network_address=/cascade_transfer_learning_medical/model/sourcemodel/SourceNetwork --ray_address='auto'
+
+% ray rsync-up ray/config.yaml
+
+% ray rsync-down ray/config.yaml
+```
+
+
+
 # References:
 * https://docs.ray.io/en/latest/cluster/vms/getting-started.html#vm-cluster-quick-start
 * https://github.com/ray-project/ray/blob/master/python/ray/autoscaler/aws/example-full.yaml

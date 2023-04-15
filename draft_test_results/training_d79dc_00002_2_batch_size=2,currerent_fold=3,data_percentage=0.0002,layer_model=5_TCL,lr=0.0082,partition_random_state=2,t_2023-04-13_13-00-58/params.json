@@ -1,0 +1,13 @@
+{
+  "args": "Namespace(dataset='IDC', max_iter=20, n_class=2, n_gpu=1.0, n_split=5, name='test_result', network_address='/cascade_transfer_learning_medical/model/sourcemodel/SourceNetwork', num_worker=8, print_freq=20, ray_address='auto', root_dir='/cascade_transfer_learning_medical/Breast_Histopathology_Images', save_folder=None, smoke_test=False)",
+  "batch_size": 2,
+  "currerent_fold": 3,
+  "data_percentage": 0.00018232537786934562,
+  "layer_model": [
+    5,
+    "TCL"
+  ],
+  "lr": 0.00815686302395334,
+  "partition_random_state": 2,
+  "training_size": 40
+}
