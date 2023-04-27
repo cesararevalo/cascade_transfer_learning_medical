@@ -221,11 +221,11 @@ if __name__ == '__main__':
     parser.add_argument('--n_split', type=int, default=5)
 
     #parser.add_argument('--max_iter', type=int, default=200, help='max number of epoch')
-    parser.add_argument('--max_iter', type=int, default=2, help='max number of epoch') # CA
+    parser.add_argument('--max_iter', type=int, default=1, help='max number of epoch') # CA
 
     # others
     #parser.add_argument('--print_freq', type=int, default=200, help='iterations')
-    parser.add_argument('--print_freq', type=int, default=1000, help='iterations')
+    parser.add_argument('--print_freq', type=int, default=1000, help='iterations') # CA
     parser.add_argument('--n_gpu', default=1.0, type=float)
     parser.add_argument('--num_worker', type=int, default=8)
 
@@ -247,7 +247,7 @@ if __name__ == '__main__':
     analysis = tune.run(
         training,
         #num_samples=50,
-        num_samples=5, # CA
+        num_samples=1, # CA
         resources_per_trial={"cpu": 4, "gpu": args.n_gpu}, # CA
         mode="max",
         export_formats=[ExportFormat.MODEL],
@@ -260,14 +260,14 @@ if __name__ == '__main__':
             "batch_size": tune.choice([2, 4, 8, 16]), # CA
             "currerent_fold": tune.choice([0, 1, 2, 3, 4]),
             "data_percentage": tune.sample_from(lambda spec: spec.config.training_size/219388),
-            #"training_size": tune.grid_search([400, 600, 800]),
-            "training_size": tune.grid_search([4, 6, 8]), # CA
+            "training_size": tune.grid_search([400, 600, 800]),
+            #"training_size": tune.grid_search([4, 6, 8]), # CA
             "partition_random_state": tune.choice([0, 1, 2]),  # partitioning dataset
             "layer_model": tune.grid_search(list(model_layer_iter()))
         },
         name=args.name,
-        resume=False,
-        #resume="AUTO", # CA
+        #resume=False,
+        resume="AUTO", # CA
         local_dir='/cascade_transfer_learning_medical/', # CA
         sync_config = tune.SyncConfig(sync_period=60), # CA
     )
