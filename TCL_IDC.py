@@ -256,8 +256,8 @@ if __name__ == '__main__':
         config={
             "args": args,
             "lr": tune.loguniform(1e-5, 1e-1),
-            #"batch_size": tune.choice([8, 16, 32, 64]),
-            "batch_size": tune.choice([2, 4, 8, 16]), # CA
+            "batch_size": tune.choice([8, 16, 32, 64]),
+            #"batch_size": tune.choice([2, 4, 8, 16]), # CA
             "currerent_fold": tune.choice([0, 1, 2, 3, 4]),
             "data_percentage": tune.sample_from(lambda spec: spec.config.training_size/219388),
             "training_size": tune.grid_search([400, 600, 800]),
