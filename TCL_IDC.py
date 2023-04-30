@@ -247,7 +247,7 @@ if __name__ == '__main__':
     analysis = tune.run(
         training,
         #num_samples=50,
-        num_samples=1, # CA
+        num_samples=10, # CA
         resources_per_trial={"cpu": 4, "gpu": args.n_gpu}, # CA
         mode="max",
         export_formats=[ExportFormat.MODEL],

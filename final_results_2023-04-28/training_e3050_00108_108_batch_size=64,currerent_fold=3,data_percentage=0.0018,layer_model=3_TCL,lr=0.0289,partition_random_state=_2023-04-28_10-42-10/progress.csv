@@ -1,0 +1,2 @@
+ACC,lr,val_loss,train_acc,train_loss,time_this_iter_s,done,timesteps_total,episodes_total,training_iteration,trial_id,experiment_id,date,timestamp,time_total_s,pid,hostname,node_ip,time_since_restore,timesteps_since_restore,iterations_since_restore,warmup_time
+78.03459930419922,0.028916915361123584,14.551857837998245,47.73270034790039,348.3488385284715,435.82382011413574,False,,,1,e3050_00108,637e766565c74cbb9552fb476e64ad39,2023-04-28_10-49-30,1682704170,435.82382011413574,7829,ip-172-31-24-130,172.31.24.130,435.82382011413574,0,1,0.003811359405517578
