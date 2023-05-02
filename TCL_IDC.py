@@ -221,7 +221,7 @@ if __name__ == '__main__':
     parser.add_argument('--n_split', type=int, default=5)
 
     #parser.add_argument('--max_iter', type=int, default=200, help='max number of epoch')
-    parser.add_argument('--max_iter', type=int, default=1, help='max number of epoch') # CA
+    parser.add_argument('--max_iter', type=int, default=10, help='max number of epoch') # CA
 
     # others
     #parser.add_argument('--print_freq', type=int, default=200, help='iterations')
